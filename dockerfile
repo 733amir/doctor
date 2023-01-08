@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1.3
-
 FROM golang:1.19-alpine3.17 as build
 
 WORKDIR /
@@ -12,8 +10,9 @@ WORKDIR /go/src/doctor
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN --mount=type=cache,target=/root/.cache/go-build \
-    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -installsuffix cgo -ldflags="-w -s" -o /bin/doctor main.go
+# RUN --mount=type=cache,target=/root/.cache/go-build \
+#     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -installsuffix cgo -ldflags="-w -s" -o /bin/doctor main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -installsuffix cgo -ldflags="-w -s" -o /bin/doctor main.go
 
 
 # Second stage is the runtime

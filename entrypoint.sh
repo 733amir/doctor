@@ -15,4 +15,5 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "$markdown" > "/results/index.html"
+mkdir -p /results
+echo "$markdown" > /results/index.html

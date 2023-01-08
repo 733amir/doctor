@@ -32,6 +32,12 @@ COPY --from=build /bin/doctor /bin/doctor
 
 COPY --from=build /go/src/doctor/entrypoint.sh /bin/entrypoint.sh
 
-VOLUME [ "/projects", "/results" ]
+VOLUME [ "/results" ]
 
-ENTRYPOINT ["/bin/entrypoint.sh", "/projects"]
+COPY projects/* /projects/
+RUN /bin/entrypoint.sh /projects
+
+FROM nginx:1.23-alpine
+WORKDIR /usr/share/nginx/html
+RUN rm -f ./*
+COPY --from=runner /results/* /usr/share/nginx/html

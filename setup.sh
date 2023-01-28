@@ -24,7 +24,7 @@ fi
 
 dep_pandoc=1
 pandoc_version=$(pandoc -v 2>&1)
-if [ $? -ne 0 ] || [[ ! "$pandoc_version" =~ .*pandoc\ 2\.19\..* ]]; then
+if [ $? -ne 0 ] || [[ ! "$pandoc_version" =~ .*pandoc\ 3\.0\..* ]]; then
     dep_pandoc=0
 fi
 
@@ -49,11 +49,11 @@ if [ $dep_go -ne 1 ] || [ $dep_rg -ne 1 ] || [ $dep_pandoc -ne 1 ]; then
     fi
 
     if [ $dep_pandoc -ne 1 ]; then
-        printf '* Pandoc [v2.19.*]\n'
+        printf '* Pandoc [v3.0.*]\n'
         case "$machine" in
         linux)
-            printf '  - Download https://github.com/jgm/pandoc/releases/download/2.19.2/pandoc-2.19.2-1-amd64.deb\n'
-            printf '  - Run: sudo dpkg -i pandoc-2.19.2-1-amd64.deb\n'
+            printf '  - Download https://github.com/jgm/pandoc/releases/download/3.0.1/pandoc-3.0.1-1-amd64.deb\n'
+            printf '  - Run: sudo dpkg -i pandoc-3.0.1-1-amd64.deb\n'
         ;;
         mac) printf '  - Run: brew install pandoc\n';;
         esac

@@ -16,11 +16,11 @@ if [ $? -ne 0 ] || [[ ! "$go_version" =~ .*go1\.1[89]\..* ]]; then
     dep_go=0
 fi
 
-dep_rg=1
-rg_version=$(rg --version 2>&1)
-if [ $? -ne 0 ] || [[ ! "$rg_version" =~ .*ripgrep\ 13\..* ]]; then
-    dep_rg=0
-fi
+# dep_rg=1
+# rg_version=$(rg --version 2>&1)
+# if [ $? -ne 0 ] || [[ ! "$rg_version" =~ .*ripgrep\ 13\..* ]]; then
+#     dep_rg=0
+# fi
 
 dep_pandoc=1
 pandoc_version=$(pandoc -v 2>&1)
@@ -29,7 +29,9 @@ if [ $? -ne 0 ] || [[ ! "$pandoc_version" =~ .*pandoc\ 3\.0\..* ]]; then
 fi
 
 
-if [ $dep_go -ne 1 ] || [ $dep_rg -ne 1 ] || [ $dep_pandoc -ne 1 ]; then
+if [ $dep_go -ne 1 ] ||
+    # [ $dep_rg -ne 1 ] ||
+    [ $dep_pandoc -ne 1 ]; then
     printf 'Error: You need to install\n'
 
     if [ $dep_go -ne 1 ]; then
@@ -40,13 +42,13 @@ if [ $dep_go -ne 1 ] || [ $dep_rg -ne 1 ] || [ $dep_pandoc -ne 1 ]; then
         esac
     fi
 
-    if [ $dep_rg -ne 1 ]; then
-        printf '* RipGrep [v13.*.* and above]\n'
-        case "$machine" in
-        linux) printf '  - Run: sudo apt install ripgrep\n';;
-        mac) printf '  - Run: brew install ripgrep\n';;
-        esac
-    fi
+    # if [ $dep_rg -ne 1 ]; then
+    #     printf '* RipGrep [v13.*.* and above]\n'
+    #     case "$machine" in
+    #     linux) printf '  - Run: sudo apt install ripgrep\n';;
+    #     mac) printf '  - Run: brew install ripgrep\n';;
+    #     esac
+    # fi
 
     if [ $dep_pandoc -ne 1 ]; then
         printf '* Pandoc [v3.0.*]\n'

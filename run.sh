@@ -27,18 +27,24 @@ doctorFile="$doctorDir/index.html"
 
 go build -o doctor ./*.go
 
-markdown=$(rg -oUiIN --color never --crlf -E utf8 --no-heading --multiline-dotall --trim '/\*+?\s*?@doctor.*?\*/' --glob-case-insensitive -g '*.php' --no-ignore $envPath |
-    rg -i --color never --crlf -E utf8 --passthru '(.*)\*/' -r '$1' |
-    rg -i --color never --crlf -E utf8 --passthru '^(\*\s?)?(.*)' -r '$2' |
-    rg -i --color never --crlf -E utf8 --passthru '^/\*+?\s*?(@doctor.*)' -r '$1' |
-    ./doctor |
-    pandoc --from gfm --to html --standalone --metadata 'title=Seller Squad Documentation')
+# markdown=$(rg -oUiIN --color never --crlf -E utf8 --no-heading --multiline-dotall --trim '/\*+?\s*?@doctor.*?\*/' --glob-case-insensitive -g '*.php' --no-ignore $envPath |
+#     rg -i --color never --crlf -E utf8 --passthru '(.*)\*/' -r '$1' |
+#     rg -i --color never --crlf -E utf8 --passthru '^(\*\s?)?(.*)' -r '$2' |
+#     rg -i --color never --crlf -E utf8 --passthru '^/\*+?\s*?(@doctor.*)' -r '$1' |
+#     ./doctor |
+#     pandoc --from gfm --to html --standalone --metadata 'title=Seller Squad Documentation'
+# )
+
+markdown=$(
+    ./doctor "$envPath"/* |
+    pandoc --from gfm --to html --standalone --metadata 'title=Seller Squad Documentation'
+)
 
 if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "$markdown" > $doctorFile
+printf '%s' "$markdown" > $doctorFile
 
 fileLink="file://$doctorFile"
 

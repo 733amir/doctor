@@ -12,7 +12,7 @@ RUN go mod download
 COPY . .
 # RUN --mount=type=cache,target=/root/.cache/go-build \
 #     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -installsuffix cgo -ldflags="-w -s" -o /bin/doctor main.go
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -installsuffix cgo -ldflags="-w -s" -o /bin/doctor main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -installsuffix cgo -ldflags="-w -s" -o /bin/doctor *.go
 
 
 # Second stage is the runtime
@@ -23,19 +23,21 @@ COPY --from=build /pandoc-2.19.2-1-amd64.deb ./
 RUN \
     # Installing necessary packages for runtime
     apt update && \
-    apt install -y \
-        ripgrep && \
     dpkg -i pandoc-2.19.2-1-amd64.deb
+    # apt install -y \
+    #     ripgrep && \
 
 # Copy the binary and static file of the project to proper path
 COPY --from=build /bin/doctor /bin/doctor
+COPY entrypoint.sh /bin/entrypoint.sh
 
-COPY --from=build /go/src/doctor/entrypoint.sh /bin/entrypoint.sh
-
-COPY ./projects /projects/
+COPY ./projects /projects
 RUN /bin/entrypoint.sh /projects
 
 FROM docker-proxy.digikala.com/nginx:1.23-alpine
 WORKDIR /usr/share/nginx/html
 RUN rm -f ./*
 COPY --from=runner /results /usr/share/nginx/html
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/.htpasswd /etc/nginx/.htpasswd
+

@@ -9,7 +9,7 @@ markdown=$(
     # rg -i --color never --crlf -E utf8 --passthru '^(\*\s?)?(.*)' -r '$2' |
     # rg -i --color never --crlf -E utf8 --passthru '^/\*+?\s*?(@doctor.*)' -r '$1' |
     /bin/doctor "$1" |
-    pandoc --from gfm --to html --standalone --metadata 'title=Seller Squad Documentation')
+    pandoc --from gfm --to html --standalone --metadata 'title=Marketplace Squad Documentation')
 
 if [ $? -ne 0 ]; then
     exit 1

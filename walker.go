@@ -50,7 +50,9 @@ func pathWalker(path string, files chan<- string) {
 
 			n := d.Name()
 			if Contains(c.Ignores, n) {
-				fmt.Printf("Walking: ignored %v\n", n)
+                if c.Log {
+                    fmt.Printf("Walking: ignored %v\n", n)
+                }
 				return filepath.SkipDir
 			}
 
